@@ -1,0 +1,39 @@
+# required module imports
+import numpy as np
+import pandas as pd
+
+# dataparser function
+def datadesigner(datafile):
+    '''
+    This function takes data in the ICOS data format
+    and rearranges it for analysis
+    '''
+    data = pd.read_table(datafile, delim_whitespace = True, dtype={'a': np.float64}, header = None)
+
+    # extract colum names (all but last one are gene names)
+    colNames = data[0]
+    colNames = list(colNames)
+
+    # tranpose the data to have genes as columns and microarray experiment as rows
+    datanew = data.T.ix[1:].copy()
+
+    # reset the index to start at 0
+    datanew = datanew.reset_index(drop=True)
+
+    # add colum labels
+    datanew.columns=colNames
+    
+    ###PROBLEM###
+    # create date set with genes only. This is the features matrix
+    X = datanew[range(data.shape[0]-1)]
+    # make sure data type is float and not string.
+    X = X.astype(float)
+    
+    # create vector with response variable
+    Y = datanew[[-1]]
+    # make sure response vector is binary 0, 1.
+    Y = pd.get_dummies(Y)
+    # choose one of the equivalent response vectors.
+    Y = Y.ix[:,0]
+
+    return X,Y

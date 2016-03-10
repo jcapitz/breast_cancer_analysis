@@ -3,3 +3,8 @@ adj_mat.csv
 gene_coeff.csv
 *.csv
 .ipynb_checkpoints/
+*.pyc
+.ipynb_checkpoints/
+.ipynb_checkpoints/
+ICOS_DATA
+ICOS_DATA/
